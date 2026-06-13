@@ -1,7 +1,7 @@
 // src/services/api.js
 // Camada central de comunicação com o backend hospedado no Render
-// const BASE_URL = import.meta.env.VITE_API_URL || "https://agendeai.onrender.com";
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://agendeai.onrender.com";
+// const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 /**
  * Adaptadores para normalizar dados do backend para o formato esperado pelo front
