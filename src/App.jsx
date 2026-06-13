@@ -8,7 +8,9 @@ import {
   agendamentoService, 
   clienteService, 
   servicoService, 
-  usuarioService 
+  usuarioService,
+  profissionalService,
+  authService
 } from "./api";
 
 // ─── UTILITÁRIOS ──────────────────────────────────────────────────────────────
@@ -280,7 +282,7 @@ function AdminLayout() {
 function DashboardPage() {
   const { data: agendamentos } = useFetch(agendamentoService.listar);
   const { data: clientes } = useFetch(clienteService.listar);
-  const { data: pros } = useFetch(usuarioService.listar);
+  const { data: pros } = useFetch(profissionalService.listar);
   
   const today = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
   return (
@@ -510,9 +512,9 @@ function ClientesPage({ showToast }) {
 
 // ─── PROFISSIONAIS ────────────────────────────────────────────────────────────
 function ProfissionaisPage({ showToast }) {
-  const { data: pros, refetch } = useFetch(usuarioService.listar);
-  const mutation = useMutation(authService.register);
-  const deleteMutation = useMutation(usuarioService.atualizar); // Usar atualizar para desativar se necessário
+  const { data: pros, refetch } = useFetch(profissionalService.listar);
+  const mutation = useMutation(profissionalService.criar);
+  const updateMutation = useMutation(profissionalService.atualizar);
 
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "profissional", commission: "", phone: "", specialties: [] });
@@ -522,7 +524,7 @@ function ProfissionaisPage({ showToast }) {
   }
 
   async function save() {
-    if (!form.name || !form.email || !form.password) return;
+    if (!form.name || !form.email) return;
     try {
       await mutation.execute(form);
       setForm({ name: "", email: "", password: "", role: "profissional", commission: "", phone: "", specialties: [] });
