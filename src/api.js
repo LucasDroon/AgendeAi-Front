@@ -28,10 +28,13 @@ const adapt = {
     name: u.nome,
     commission: u.percentual_comissao,
   }),
-  agendamento: (a) => ({
-    ...a,
-    id: a.id_agendamento,
-  }),
+  agendamento: (a) => {
+    console.log("Debug - Adaptando agendamento:", a);
+    return {
+      ...a,
+      id: a.id || a.id_agendamento,
+    };
+  },
   profissional: (p) => ({
     ...p,
     id: p.id_profissional,
@@ -54,11 +57,10 @@ const toBackend = {
     percentual_comissao: s.commission,
   }),
   profissional: (p) => ({
-    nome: p.name,
-    percentual_comissao: p.commission,
-    telefone: p.phone,
-    role: p.role,
-    // Especialidades seriam tratadas aqui se necessário
+    nome: p.nome,
+    percentual_comissao: p.percentual_comissao,
+    cor_agenda: p.cor_agenda,
+    ativo: p.ativo,
   }),
 };
 

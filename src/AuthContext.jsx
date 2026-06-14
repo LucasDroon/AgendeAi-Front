@@ -18,12 +18,22 @@ export function AuthProvider({ children }) {
 
   const [token, setToken] = useState(() => localStorage.getItem("token") || null);
 
-  const login = useCallback(async (credentials) => {
+  const login = useCallback(async (credentials, selectedProfile) => {
     const data = await authService.login(credentials);
+    
+    // Validação de Perfil
+    const expectedRole = selectedProfile === "administrador" ? "ADMIN" : "PROFISSIONAL";
+    if (data.role !== expectedRole) {
+      throw new Error(`Acesso negado: Este usuário não possui o perfil de ${selectedProfile}.`);
+    }
 
-    // O backend retorna { token: "...", user: { name: "..." } }
-    const jwt = data.token || data.access_token;
-    const userData = data.user || { name: credentials.email.split('@')[0], email: credentials.email };
+    const jwt = data.token;
+    const userData = {
+      id: data.id,
+      name: data.nome,
+      email: data.email,
+      role: data.role
+    };
 
     localStorage.setItem("token", jwt);
     localStorage.setItem("user", JSON.stringify(userData));
